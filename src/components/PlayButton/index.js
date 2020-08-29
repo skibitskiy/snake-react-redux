@@ -2,6 +2,7 @@ import './index.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { setPause, resetGame } from '../../redux/actions';
 
@@ -72,6 +73,13 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   setPause,
   resetGame
+};
+
+PlayButton.propTypes = {
+  isGameOver: PropTypes.bool.isRequired,
+  isPause: PropTypes.bool.isRequired,
+  setPause: PropTypes.func.isRequired,
+  resetGame: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayButton);

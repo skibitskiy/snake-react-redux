@@ -2,6 +2,7 @@ import './index.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 /**
  * Компонент, отображающий количество очков
@@ -22,5 +23,9 @@ function mapStateToProps(state) {
     score: state.get('score')
   };
 }
+
+Score.propTypes = {
+  score: PropTypes.number.isRequired
+};
 
 export default connect(mapStateToProps, null)(Score);

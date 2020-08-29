@@ -32,4 +32,8 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
+Cell.propTypes = {
+  type: PropTypes.oneOf([Object.values(cellTypes)]).isRequired
+};
+
 export default connect(mapStateToProps, null)(Cell);

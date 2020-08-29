@@ -2,6 +2,7 @@ import './index.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import {
   gameTick,
@@ -30,10 +31,6 @@ class Game extends React.Component {
     this.arrowKeysCallback = this.arrowKeysCallback.bind(this);
   }
 
-  componentWillUnmount() {
-    clearInterval(this.intervalId);
-  }
-
   componentDidUpdate() {
     const { isPause, isGameOver, gameTick } = this.props;
 
@@ -44,8 +41,12 @@ class Game extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+
   arrowKeysCallback(event) {
-    const { isPause, isGameOver, addDirection } = this.props;
+    const { isPause, isGameOver, addDirection, setPause } = this.props;
 
     if ((isPause || isGameOver) && event.keyCode !== 32) {
       return;
@@ -97,6 +98,14 @@ const mapDispatchToProps = {
   gameTick,
   addDirection,
   setPause
+};
+
+Game.propTypes = {
+  isGameOver: PropTypes.bool.isRequired,
+  isPause: PropTypes.bool.isRequired,
+  gameTick: PropTypes.func.isRequired,
+  addDirection: PropTypes.func.isRequired,
+  setPause: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
