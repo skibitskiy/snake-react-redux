@@ -116,15 +116,16 @@ function gameTick() {
           .set('goal', goal)
           .set('score', score + 1);
       }
+
+      board = getBoardWithObjects([
+        [snake.slice(0, -1), cellTypes.SNAKE],
+        [snake.last(), cellTypes.SNAKEHEAD],
+        [goal, cellTypes.GOAL]
+      ]);
+
+      state = state.set('board', board);
     }
 
-    board = getBoardWithObjects([
-      [snake.slice(0, -1), cellTypes.SNAKE],
-      [snake.last(), cellTypes.SNAKEHEAD],
-      [goal, cellTypes.GOAL]
-    ]);
-
-    state = state.set('board', board);
     dispatch(setGame(state));
   };
 }

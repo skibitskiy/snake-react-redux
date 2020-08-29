@@ -28,26 +28,30 @@ class PlayButton extends React.Component {
   getSelector() {
     const { isGameOver, isPause } = this.props;
 
-    let selector = 'play-button_start';
-    if (isPause) {
-      selector = 'play-button_continue';
-    }
+    let selector;
     if (isGameOver) {
       selector = 'play-button_restart';
+    } else if (isPause) {
+      selector = 'play-button_start';
+    } else {
+      selector = 'play-button_pause';
     }
+
     return selector;
   }
 
   getText() {
     const { isGameOver, isPause } = this.props;
 
-    let text = 'СТАРТ';
-    if (isPause) {
-      text = 'ПРОДОЛЖИТЬ';
-    }
+    let text;
     if (isGameOver) {
       text = 'РЕСТАРТ';
+    } else if (isPause) {
+      text = 'ИГРАТЬ';
+    } else {
+      text = 'ПАУЗА';
     }
+
     return text;
   }
 
