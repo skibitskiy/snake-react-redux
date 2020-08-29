@@ -1,0 +1,16 @@
+.play-button {
+  justify-content: center;
+  color: white;
+}
+
+.play-button_start {
+  background-color: rgba(255, 251, 0, 0.8);
+}
+
+.play-button_continue {
+  background-color: #32a852
+}
+
+.play-button_restart {
+  background-color: #f54242;
+}

@@ -1,0 +1,17 @@
+.board {
+  box-sizing: border-box;
+
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  grid-template-rows: repeat(16, calc(40vw/16));
+  grid-gap: 1px;
+
+  width: 100%;
+  max-width: 40vw;
+  border: 8px solid rgba(255, 255, 255, 0.2);
+}
+
+.game__board-wrapper {
+  grid-column: 2;
+  grid-row: 2;
+}
