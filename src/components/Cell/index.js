@@ -1,7 +1,7 @@
 import './index.css';
 
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { cellTypes } from '../../helpers/constants';
@@ -9,31 +9,18 @@ import { cellTypes } from '../../helpers/constants';
 /**
  * Компонент клетки игрового поля
  */
-class Cell extends React.Component {
-  render() {
-    const { type } = this.props;
+const Cell = (props) => {
+  const { x, y } = props;
+  const type = useSelector((state) => state.getIn(['board', y, x]));
 
-    return (
-      <div className={`cell cell_type_${cellTypes[type].toLowerCase()}`} />
-    );
-  }
-}
-
-Cell.propTypes = {
-  type: PropTypes.oneOf(Object.values(cellTypes)).isRequired
+  return (
+    <div className={`cell cell_type_${cellTypes[type].toLowerCase()}`} />
+  );
 };
 
-function mapStateToProps(state, ownProps) {
-  const { x, y } = ownProps;
-  const board = state.get('board');
-  const type = board.getIn([y, x]);
-  return {
-    type
-  };
-}
-
 Cell.propTypes = {
-  type: PropTypes.oneOf([Object.values(cellTypes)]).isRequired
+  x: PropTypes.number.isRequired,
+  y: PropTypes.number.isRequired
 };
 
-export default connect(mapStateToProps, null)(Cell);
+export default Cell;

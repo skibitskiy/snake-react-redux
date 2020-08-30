@@ -1,13 +1,14 @@
 import './index.css';
 
-import React from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import React, { useCallback } from 'react';
+import { useSelector, shallowEqual } from 'react-redux';
+
+import { useActions, useInterval } from '../../helpers/hooks';
 
 import {
-  gameTick,
-  addDirection,
-  setPause
+  gameTick as _gameTick,
+  addDirection as _addDirection,
+  setPause as _setPause
 } from '../../redux/actions';
 
 import Board from '../Board';
@@ -25,29 +26,16 @@ import {
 /**
  * Компонент игры
  */
-class Game extends React.Component {
-  constructor(props) {
-    super(props);
-    this.arrowKeysCallback = this.arrowKeysCallback.bind(this);
-  }
+const Game = () => {
+  const { isGameOver, isPause } = useSelector(
+    (state) => ({ isGameOver: state.get('isGameOver'), isPause: state.get('isPause') }),
+    shallowEqual
+  );
+  const [gameTick, addDirection, setPause] = useActions([_gameTick, _addDirection, _setPause]);
 
-  componentDidUpdate() {
-    const { isPause, isGameOver, gameTick } = this.props;
+  useInterval(gameTick, intervalBetweenSteps, isGameOver || isPause);
 
-    if (isPause || isGameOver) {
-      clearInterval(this.intervalId);
-    } else {
-      this.intervalId = setInterval(gameTick, intervalBetweenSteps);
-    }
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.intervalId);
-  }
-
-  arrowKeysCallback(event) {
-    const { isPause, isGameOver, addDirection, setPause } = this.props;
-
+  const arrowKeysCallback = useCallback((event) => {
     if ((isPause || isGameOver) && event.keyCode !== 32) {
       return;
     }
@@ -70,42 +58,21 @@ class Game extends React.Component {
         break;
       default:
     }
-  }
+  }, [isPause, isGameOver]);
 
-  render() {
-    return (
-      <div className="game" onKeyDown={this.arrowKeysCallback} tabIndex="0">
-        <div className="game__board-wrapper">
-          <Board />
-        </div>
-        <div className="controls game__controls">
-          <div className="controls__control-element-wrapper">
-            <Score />
-          </div>
-          <PlayButton />
-        </div>
+  return (
+    <div className="game" onKeyDown={arrowKeysCallback} tabIndex="0">
+      <div className="game__board-wrapper">
+        <Board />
       </div>
-    );
-  }
-}
-
-const mapStateToProps = (state) => ({
-  isGameOver: state.get('isGameOver'),
-  isPause: state.get('isPause')
-});
-
-const mapDispatchToProps = {
-  gameTick,
-  addDirection,
-  setPause
+      <div className="controls game__controls">
+        <div className="controls__control-element-wrapper">
+          <Score />
+        </div>
+        <PlayButton />
+      </div>
+    </div>
+  );
 };
 
-Game.propTypes = {
-  isGameOver: PropTypes.bool.isRequired,
-  isPause: PropTypes.bool.isRequired,
-  gameTick: PropTypes.func.isRequired,
-  addDirection: PropTypes.func.isRequired,
-  setPause: PropTypes.func.isRequired
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Game);
+export default Game;
